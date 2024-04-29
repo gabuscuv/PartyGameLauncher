@@ -351,6 +351,8 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
         # NOTE: Required packages: libegl1-mesa-dev
         LDLIBS = -lraylib -lGL -lm -lpthread -ldl -lrt
 
+        LDLIBS += -lusb-1.0 
+
         # On X11 requires also below libraries
         LDLIBS += -lX11
         # NOTE: It seems additional libraries are not required any more, latest GLFW just dlopen them

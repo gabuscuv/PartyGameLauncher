@@ -29,6 +29,9 @@
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+
+static int multiplyAnimation = 3;
+
 static int framesCounter = 0;
 static int finishScreen = 0;
 
@@ -74,9 +77,9 @@ void UpdateLogoScreen(void)
 {
     if (state == 0)                 // State 0: Top-left square corner blink logic
     {
-        framesCounter++;
+        framesCounter += multiplyAnimation;
 
-        if (framesCounter == 80)
+        if (framesCounter >= 80)
         {
             state = 1;
             framesCounter = 0;      // Reset counter... will be used later...
@@ -84,21 +87,21 @@ void UpdateLogoScreen(void)
     }
     else if (state == 1)            // State 1: Bars animation logic: top and left
     {
-        topSideRecWidth += 8;
-        leftSideRecHeight += 8;
+        topSideRecWidth += 8 * multiplyAnimation;
+        leftSideRecHeight += 8 * multiplyAnimation;
 
-        if (topSideRecWidth == 256) state = 2;
+        if (topSideRecWidth >= 256) state = 2;
     }
     else if (state == 2)            // State 2: Bars animation logic: bottom and right
     {
-        bottomSideRecWidth += 8;
-        rightSideRecHeight += 8;
+        bottomSideRecWidth += 8 * multiplyAnimation;;
+        rightSideRecHeight += 8 * multiplyAnimation;;
 
-        if (bottomSideRecWidth == 256) state = 3;
+        if (bottomSideRecWidth >= 256) state = 3;
     }
     else if (state == 3)            // State 3: "raylib" text-write animation logic
     {
-        framesCounter++;
+        framesCounter += multiplyAnimation;
 
         if (lettersCount < 10)
         {
@@ -112,7 +115,7 @@ void UpdateLogoScreen(void)
         {
             if (framesCounter > 200)
             {
-                alpha -= 0.02f;
+                alpha -= 0.02f * multiplyAnimation;
 
                 if (alpha <= 0.0f)
                 {

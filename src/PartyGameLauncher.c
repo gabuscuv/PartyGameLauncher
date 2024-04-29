@@ -13,6 +13,7 @@
 ********************************************************************************************/
 
 #include "raylib.h"
+
 #include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 
 #if defined(PLATFORM_WEB)
@@ -31,8 +32,8 @@ Sound fxCoin = { 0 };
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
 //----------------------------------------------------------------------------------
-static const int screenWidth = 800;
-static const int screenHeight = 450;
+static const int screenWidth = 1920;
+static const int screenHeight = 1080;
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -57,6 +58,7 @@ static void UpdateDrawFrame(void);          // Update and draw one frame
 //----------------------------------------------------------------------------------
 int main(void)
 {
+
     // Initialization
     //---------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "raylib game template");
@@ -104,6 +106,7 @@ int main(void)
     UnloadFont(font);
     UnloadMusicStream(music);
     UnloadSound(fxCoin);
+
 
     CloseAudioDevice();     // Close audio context
 
