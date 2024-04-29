@@ -3,7 +3,7 @@
 *   Copyright (c) 2024 Gabriel Bustillo del Cuvillo (@gabuscuv)
 *
 **********************************************************************************************/
-#define libUSB 0
+#define libUSB 1
 
 #include "raylib.h"
 #include "screens.h"
@@ -40,6 +40,7 @@ int SingstarHotplugCallback(struct libusb_context *ctx, struct libusb_device *de
   if (LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED == event) {
     finishScreen = 2;
         TraceLog(LOG_INFO, "LibUSB: SingStar Dongle Connected");
+        return 1;
 
   } else if (LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT == event) {
             TraceLog(LOG_INFO, "LibUSB: SingStar Dongle Disconnected");
@@ -105,7 +106,7 @@ void UpdateTitleScreen(void)
 #if libUSB
     framesCounter++;
 
-    if(framesCounter > 180)
+    if(callback_handle && framesCounter > 180)
     {
         libusb_handle_events_completed(NULL, NULL);
         framesCounter = 0;
@@ -134,8 +135,10 @@ void UnloadTitleScreen(void)
 {
     #if libUSB
     TraceLog(LOG_INFO, "libUSB: Freeing libUSB Resources");
-    libusb_hotplug_deregister_callback(NULL, callback_handle);
-    libusb_handle_events_completed(NULL, NULL);
+    if (callback_handle)
+    {
+        libusb_hotplug_deregister_callback(NULL, callback_handle);
+    }
     
     libusb_exit(NULL);
     #endif
