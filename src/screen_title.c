@@ -106,8 +106,9 @@ void UpdateTitleScreen(void)
 #if libUSB
     framesCounter++;
 
-    if(callback_handle && framesCounter > 180)
+    if(callback_handle && framesCounter > 300)
     {
+        TraceLog(LOG_INFO, "LibUSB: libusb_handle_events_completed Executed");
         libusb_handle_events_completed(NULL, NULL);
         framesCounter = 0;
     }
@@ -133,6 +134,8 @@ void DrawTitleScreen(void)
 // Title Screen Unload logic
 void UnloadTitleScreen(void)
 {
+    framesCounter = 0;
+
     #if libUSB
     TraceLog(LOG_INFO, "libUSB: Freeing libUSB Resources");
     if (callback_handle)

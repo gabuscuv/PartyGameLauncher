@@ -25,6 +25,7 @@
 
 #include "raylib.h"
 #include "screens.h"
+#include <stdlib.h>
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
@@ -53,7 +54,9 @@ void UpdateGameplayScreen(void)
     if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
     {
         finishScreen = 1;
+        
         PlaySound(fxCoin);
+        system("ultrastar-worldparty");
     }
 }
 
@@ -63,8 +66,8 @@ void DrawGameplayScreen(void)
     // TODO: Draw GAMEPLAY screen here!
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
     Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
-    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+    DrawTextEx(font, "Waiting for Input", pos, font.baseSize*3.0f, 4, MAROON);
+    DrawText("Connect a Mobile Device to the Input Web or connect a Keyboard a Press Enter", 130, 220, 20, MAROON);
 }
 
 // Gameplay Screen Unload logic
