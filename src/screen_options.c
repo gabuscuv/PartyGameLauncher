@@ -31,6 +31,12 @@
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+static int textStartX = 0;
+static int textStartY = 0;
+static int fontSize = 24;
+static bool changeToMainMenu = false;
+static char * messageScreen = "Switch off all controls to return to the main menu.";
+static Vector2 pos = { 20, 10 };
 
 //----------------------------------------------------------------------------------
 // Options Screen Functions Definition
@@ -42,23 +48,47 @@ void InitOptionsScreen(void)
     // TODO: Initialize OPTIONS screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+
+    int textWidth = MeasureText(messageScreen, fontSize);
+    textStartX = (GetScreenWidth() / 2) - (textWidth / 2);
+    textStartY = (GetScreenHeight() / 2) - (fontSize / 2);
 }
 
 // Options Screen Update logic
 void UpdateOptionsScreen(void)
 {
+    framesCounter++;
+    if ( framesCounter > 10 && ! changeToMainMenu)
+    {
+        system("ES-DE");
+        changeToMainMenu = true;
+    }
+
+    if (changeToMainMenu && ! IsGamepadAvailable(0))
+    {
+        finishScreen = 1;
+    }
     // TODO: Update OPTIONS screen variables here!
 }
 
 // Options Screen Draw logic
 void DrawOptionsScreen(void)
 {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLUE);
+    DrawTextEx(font, "Playing", pos, font.baseSize*3.0f, 4, DARKBLUE);
+
+    if (changeToMainMenu)
+    {
+        DrawText(messageScreen, textStartX, textStartY, fontSize, DARKBLUE);
+    }
     // TODO: Draw OPTIONS screen here!
 }
 
 // Options Screen Unload logic
 void UnloadOptionsScreen(void)
 {
+    framesCounter = 0;
+    changeToMainMenu = false;
     // TODO: Unload OPTIONS screen variables here!
 }
 
