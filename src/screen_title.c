@@ -2,6 +2,10 @@
 *
 *   Copyright (c) 2024 Gabriel Bustillo del Cuvillo (@gabuscuv)
 *
+*   raylib - Advance Game template
+*   Gameplay Screen Functions Definitions (Init, Update, Draw, Unload)
+*   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
+*
 **********************************************************************************************/
 #define libUSB 1
 
