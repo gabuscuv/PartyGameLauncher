@@ -72,7 +72,11 @@ void InitTitleScreen(void)
     finishScreen = 0;
 
 #if libUSB
-    libusb_init_context(&libUSBContext, NULL, 0);
+#if LIBUSB_API_VERSION >= 0x0100010A
+   libusb_init_context(&libUSBContext, NULL, 0);
+#else
+    libusb_init(&libUSBContext);
+#endif
     //libusb_init(&libUSBContext);
 
         int rc = libusb_hotplug_register_callback(libUSBContext, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED |
