@@ -45,7 +45,10 @@ void UpdateOptionsScreen(void)
     framesCounter++;
     if ( framesCounter > 10 && ! changeToMainMenu)
     {
+        MinimizeWindow();
         system("ES-DE");
+        RestoreWindow();
+        SetWindowFocused();
         changeToMainMenu = true;
         // This is just a way of disconnect all devices connected
         // #2 Low effort implementation.

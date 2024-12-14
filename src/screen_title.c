@@ -11,6 +11,7 @@
 
 #include "raylib.h"
 #include "screens.h"
+#include "pthread.h"                        // POSIX style threads management
 #if libUSB
 #include <libusb-1.0/libusb.h>
 #endif
@@ -27,9 +28,13 @@ static int textStartX = 0;
 static int textStartY = 0;
 static int fontSize = 24;
 #if libUSB
+static pthread_t threadId;
+static libusb_context* libUSBContext =NULL;
 static libusb_hotplug_callback_handle callback_handle;
+static void *USBPluginThread(void *arg);     // Loading data thread function declaration
 #endif
 static char* messageScreen = "Introduce un SingStar Dongle o un GamePad";
+
 
 //----------------------------------------------------------------------------------
 // Title Screen Functions Definition
@@ -62,21 +67,32 @@ int SingstarHotplugCallback(struct libusb_context *ctx, struct libusb_device *de
 // Title Screen Initialization logic
 void InitTitleScreen(void)
 {
+
     framesCounter = 0;
     finishScreen = 0;
 
 #if libUSB
-    libusb_init(NULL);
+    libusb_init_context(&libUSBContext, NULL, 0);
+    //libusb_init(&libUSBContext);
 
-        int rc = libusb_hotplug_register_callback(NULL, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED |
+        int rc = libusb_hotplug_register_callback(libUSBContext, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED |
                                         LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT, 0, 0x1415, 0x0000,
                                         LIBUSB_HOTPLUG_MATCH_ANY, SingstarHotplugCallback, NULL,
                                         &callback_handle);
   if (LIBUSB_SUCCESS != rc) {
     TraceLog(LOG_ERROR, "LibUSB: Failed To Register SingstarHotplug Event");
-    libusb_exit(NULL);
+    libusb_exit(libUSBContext);
   }
+
+    int threadResult = pthread_create(&threadId, NULL, &USBPluginThread, NULL);
+    
+  if (threadResult != 0) {
+       TraceLog(LOG_INFO, "LibUSB: Error making thread for Checks");
+
+  }
+
     TraceLog(LOG_INFO, "LibUSB: SingstarHotplug Event Registered Sucessfully");
+
 #endif
   
 
@@ -110,12 +126,7 @@ void UpdateTitleScreen(void)
 #if libUSB
     framesCounter++;
 
-    if(callback_handle && framesCounter > 300)
-    {
-        TraceLog(LOG_INFO, "LibUSB: libusb_handle_events_completed Executed");
-        libusb_handle_events_completed(NULL, NULL);
-        framesCounter = 0;
-    }
+
 
 #endif
     // TODO: Update TITLE screen variables here!
@@ -141,13 +152,15 @@ void UnloadTitleScreen(void)
     framesCounter = 0;
 
     #if libUSB
-    TraceLog(LOG_INFO, "libUSB: Freeing libUSB Resources");
+    
     if (callback_handle)
     {
-        libusb_hotplug_deregister_callback(NULL, callback_handle);
+        libusb_hotplug_deregister_callback(libUSBContext, callback_handle);
+        TraceLog(LOG_INFO, "libUSB: deregiting libUSB events");
     }
-    
-    libusb_exit(NULL);
+    //pthread_exit(&threadId);
+    TraceLog(LOG_INFO, "libUSB: Freeing libUSB Resources");
+    libusb_exit(libUSBContext);
     #endif
     // TODO: Unload TITLE screen variables here!
 }
@@ -157,3 +170,16 @@ int FinishTitleScreen(void)
 {
     return finishScreen;
 }
+
+#if libUSB
+static void *USBPluginThread(void *arg)
+{
+    while (callback_handle && (finishScreen == 0 || !WindowShouldClose()))
+    {
+        TraceLog(LOG_INFO, "LibUSB: libusb_handle_events_completed Executed");
+        libusb_handle_events_completed(libUSBContext, NULL);
+    }
+
+    return NULL;
+}
+#endif
