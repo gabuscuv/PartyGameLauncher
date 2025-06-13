@@ -61,7 +61,7 @@ int main(void)
 
     // Initialization
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "raylib game template");
+    InitWindow(screenWidth, screenHeight, "PartyGameLauncher");
 
     InitAudioDevice();      // Initialize audio device
 

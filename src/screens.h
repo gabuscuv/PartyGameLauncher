@@ -43,6 +43,12 @@ extern Sound fxCoin;
 extern "C" {            // Prevents name mangling of functions
 #endif
 
+#ifdef __cplusplus__
+  #include <cstdlib>
+#else
+  #include <stdlib.h>
+#endif
+
 //----------------------------------------------------------------------------------
 // Logo Screen Functions Declaration
 //----------------------------------------------------------------------------------

@@ -62,7 +62,10 @@ void UpdateGameplayScreen(void)
         finishScreen = 1;
         
         PlaySound(fxCoin);
+        MinimizeWindow();
         system("ultrastar-worldparty");
+        RestoreWindow();
+        SetWindowFocused();
     }
 }
 
