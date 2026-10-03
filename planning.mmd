@@ -1,0 +1,24 @@
+flowchart TD
+    Launcher[Device Launcher] --> Detect{Device Detection}
+
+    Detect -->|Microphone| Mic
+    Detect -->|Gamepad| Pad
+    Detect -->|Guitar| Guitar
+
+    subgraph Mic["Microphone Frontend"]
+        UltraStar[UltraStar Deluxe]
+        UltraStar[UltraStar Play]
+        KaraokeMugen[Karaoke Mugen]
+    end
+
+    subgraph Pad["Gamepad Frontend"]
+        ESDE[ES-DE]
+        SteamLink[Steam Link]
+        Moonlight[Moonlight]
+    end
+
+    subgraph Guitar["Guitar Frontend"]
+        CloneHero[Clone Hero]
+        YARG[YARG]
+        GH2DX[GH2DX]
+    end
